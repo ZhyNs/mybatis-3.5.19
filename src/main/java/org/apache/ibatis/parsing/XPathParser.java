@@ -41,6 +41,9 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
 /**
+ * xml文件解析器，负责处理xml文件。底层使用jdk自带的xPath包，对其封装一层，转化为mybatis语言。
+ * 如果对XPath不清楚或者感兴趣，可自行了解。
+ *
  * @author Clinton Begin
  * @author Kazuki Shimizu
  */
@@ -50,6 +53,7 @@ public class XPathParser {
   private boolean validation;
   private EntityResolver entityResolver;
   private Properties variables;
+  // 实际处理xml文件的xpath对象
   private XPath xpath;
 
   public XPathParser(String xml) {

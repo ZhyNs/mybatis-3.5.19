@@ -48,6 +48,9 @@ import org.apache.ibatis.transaction.TransactionFactory;
 import org.apache.ibatis.type.JdbcType;
 
 /**
+ * xml配置文件的构造器
+ * 在构造函数中初始化参数，比如创建Configuration实例、环境类、xml文件解析器（XPathParser）等。
+ *
  * @author Clinton Begin
  * @author Kazuki Shimizu
  */
@@ -89,11 +92,13 @@ public class XMLConfigBuilder extends BaseBuilder {
 
   public XMLConfigBuilder(Class<? extends Configuration> configClass, InputStream inputStream, String environment,
       Properties props) {
+    // 创建XPathParser实例
     this(configClass, new XPathParser(inputStream, true, props, new XMLMapperEntityResolver()), environment, props);
   }
 
   private XMLConfigBuilder(Class<? extends Configuration> configClass, XPathParser parser, String environment,
       Properties props) {
+    // 创建Configuration类的实例
     super(newConfig(configClass));
     ErrorContext.instance().resource("SQL Mapper Configuration");
     this.configuration.setVariables(props);
@@ -107,10 +112,12 @@ public class XMLConfigBuilder extends BaseBuilder {
       throw new BuilderException("Each XMLConfigBuilder can only be used once.");
     }
     parsed = true;
+    // parser.evalNode("/configuration")：获取配置文件的root节点
     parseConfiguration(parser.evalNode("/configuration"));
     return configuration;
   }
 
+  // 解析mybatis的配置xml文件
   private void parseConfiguration(XNode root) {
     try {
       // issue #117 read properties first
@@ -118,6 +125,7 @@ public class XMLConfigBuilder extends BaseBuilder {
       Properties settings = settingsAsProperties(root.evalNode("settings"));
       loadCustomVfsImpl(settings);
       loadCustomLogImpl(settings);
+      // 解析类型别名
       typeAliasesElement(root.evalNode("typeAliases"));
       pluginsElement(root.evalNode("plugins"));
       objectFactoryElement(root.evalNode("objectFactory"));
@@ -127,7 +135,9 @@ public class XMLConfigBuilder extends BaseBuilder {
       // read it after objectFactory and objectWrapperFactory issue #631
       environmentsElement(root.evalNode("environments"));
       databaseIdProviderElement(root.evalNode("databaseIdProvider"));
+      // 解析类型处理器
       typeHandlersElement(root.evalNode("typeHandlers"));
+      // 解析所有mapper.xml文件
       mappersElement(root.evalNode("mappers"));
     } catch (Exception e) {
       throw new BuilderException("Error parsing SQL Mapper Configuration. Cause: " + e, e);
@@ -432,6 +442,7 @@ public class XMLConfigBuilder extends BaseBuilder {
     return environment.equals(id);
   }
 
+  // 创建Configuration的实例
   private static Configuration newConfig(Class<? extends Configuration> configClass) {
     try {
       return configClass.getDeclaredConstructor().newInstance();

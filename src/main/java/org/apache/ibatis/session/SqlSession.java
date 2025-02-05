@@ -24,15 +24,15 @@ import org.apache.ibatis.cursor.Cursor;
 import org.apache.ibatis.executor.BatchResult;
 
 /**
- * The primary Java interface for working with MyBatis. Through this interface you can execute commands, get mappers and
- * manage transactions.
+ * sqlSession是Mybatis和Java交互的重要接口。
+ * 通过SqlSession接口，可执行sql命令、获取mappers、管理事务。
  *
  * @author Clinton Begin
  */
 public interface SqlSession extends Closeable {
 
   /**
-   * Retrieve a single row mapped from the statement key.
+   * 根据sql语句，查询一条数据
    *
    * @param <T>
    *          the returned object type
@@ -44,6 +44,7 @@ public interface SqlSession extends Closeable {
   <T> T selectOne(String statement);
 
   /**
+   * 根据sql语句和查询参数，查询一条数据
    * Retrieve a single row mapped from the statement key and parameter.
    *
    * @param <T>
@@ -58,6 +59,7 @@ public interface SqlSession extends Closeable {
   <T> T selectOne(String statement, Object parameter);
 
   /**
+   * 根据sql语句，查询数据列表
    * Retrieve a list of mapped objects from the statement key.
    *
    * @param <E>
@@ -70,6 +72,7 @@ public interface SqlSession extends Closeable {
   <E> List<E> selectList(String statement);
 
   /**
+   * 根据sql语句和查询参数，查询数据列表
    * Retrieve a list of mapped objects from the statement key and parameter.
    *
    * @param <E>

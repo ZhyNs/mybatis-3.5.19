@@ -29,6 +29,8 @@ import org.apache.ibatis.type.TypeHandler;
 import org.apache.ibatis.type.TypeHandlerRegistry;
 
 /**
+ * XmlConfiguration、XmlMapper、xmlStatement等的基础构造器
+ *
  * @author Clinton Begin
  */
 public abstract class BaseBuilder {

@@ -1,3 +1,4 @@
+
 /*
  *    Copyright 2009-2024 the original author or authors.
  *
@@ -98,18 +99,23 @@ import org.apache.ibatis.type.TypeHandler;
 import org.apache.ibatis.type.TypeHandlerRegistry;
 
 /**
+ * Mybatis的配置类，核心类。（可作为阅读源码的入口）
+ *
  * @author Clinton Begin
  */
 public class Configuration {
 
+  // Mybatis运行环境类
   protected Environment environment;
 
+  //---------以下都是<settings>节点-------
   protected boolean safeRowBoundsEnabled;
   protected boolean safeResultHandlerEnabled = true;
   protected boolean mapUnderscoreToCamelCase;
   protected boolean aggressiveLazyLoading;
   protected boolean useGeneratedKeys;
   protected boolean useColumnLabel = true;
+  // 默认启用缓存
   protected boolean cacheEnabled = true;
   protected boolean callSettersOnNulls;
   protected boolean useActualParamName = true;
@@ -129,6 +135,7 @@ public class Configuration {
   protected Integer defaultStatementTimeout;
   protected Integer defaultFetchSize;
   protected ResultSetType defaultResultSetType;
+  // 默认sql执行器
   protected ExecutorType defaultExecutorType = ExecutorType.SIMPLE;
   protected AutoMappingBehavior autoMappingBehavior = AutoMappingBehavior.PARTIAL;
   protected AutoMappingUnknownColumnBehavior autoMappingUnknownColumnBehavior = AutoMappingUnknownColumnBehavior.NONE;
@@ -188,6 +195,7 @@ public class Configuration {
   }
 
   public Configuration() {
+    // ------- 在默认构造函数中注册类型别名、语言驱动器（默认xml语言） --------
     typeAliasRegistry.registerAlias("JDBC", JdbcTransactionFactory.class);
     typeAliasRegistry.registerAlias("MANAGED", ManagedTransactionFactory.class);
 
@@ -740,8 +748,10 @@ public class Configuration {
     } else if (ExecutorType.REUSE == executorType) {
       executor = new ReuseExecutor(this, transaction);
     } else {
+      // 默认sql执行器
       executor = new SimpleExecutor(this, transaction);
     }
+    // 如果开启缓存，则使用缓存sql执行器
     if (cacheEnabled) {
       executor = new CachingExecutor(executor);
     }
@@ -996,6 +1006,7 @@ public class Configuration {
     }
   }
 
+  // 解析mapper.xml的sql语句
   public void parsePendingStatements(boolean reportUnresolved) {
     if (incompleteStatements.isEmpty()) {
       return;

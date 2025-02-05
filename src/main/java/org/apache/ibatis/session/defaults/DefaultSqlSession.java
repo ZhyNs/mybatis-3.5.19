@@ -40,7 +40,9 @@ import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 
 /**
- * The default implementation for {@link SqlSession}. Note that this class is not Thread-Safe.
+ * SqlSession的默认实现类。注意该类不是线程安全的。
+ * selectOne()底层调用的selectList()
+ * insert()底层调用的是update()
  *
  * @author Clinton Begin
  */
@@ -151,6 +153,7 @@ public class DefaultSqlSession implements SqlSession {
     try {
       MappedStatement ms = configuration.getMappedStatement(statement);
       dirty |= ms.isDirtySelect();
+      // 调用sql执行器查询
       return executor.query(ms, wrapCollection(parameter), rowBounds, handler);
     } catch (Exception e) {
       throw ExceptionFactory.wrapException("Error querying database.  Cause: " + e, e);

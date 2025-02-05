@@ -30,6 +30,10 @@ import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
 
 /**
+ * sql语句处理器路由类
+ * 代理模式，主要目的是控制访问。不是工厂方法模式（创建对象）
+ * 根据不同语句类型，将sql语句处理转发给对应的处理器，除了路由之外，没有其他逻辑。
+ *
  * @author Clinton Begin
  */
 public class RoutingStatementHandler implements StatementHandler {

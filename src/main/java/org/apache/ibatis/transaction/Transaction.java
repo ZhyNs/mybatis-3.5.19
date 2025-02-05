@@ -19,6 +19,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 /**
+ * jdbc的connection的包装类。处理sql链接的生命周期，包括创建、预编译、提交/回滚、关闭。
  * Wraps a database connection. Handles the connection lifecycle that comprises: its creation, preparation,
  * commit/rollback and close.
  *

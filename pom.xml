@@ -38,6 +38,7 @@
     tools.</description>
   <url>https://www.mybatis.org/mybatis-3/</url>
 
+  <!-- 起始年份 -->
   <inceptionYear>2009</inceptionYear>
 
   <scm>

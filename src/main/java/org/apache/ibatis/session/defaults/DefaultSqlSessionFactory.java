@@ -32,6 +32,8 @@ import org.apache.ibatis.transaction.TransactionFactory;
 import org.apache.ibatis.transaction.managed.ManagedTransactionFactory;
 
 /**
+ * 默认的SqlSessionFactory，生产环境用的也是这个类
+ *
  * @author Clinton Begin
  */
 public class DefaultSqlSessionFactory implements SqlSessionFactory {
@@ -91,13 +93,16 @@ public class DefaultSqlSessionFactory implements SqlSessionFactory {
     return new DefaultSqlSession(configuration, executor, autoCommit);
   }
 
+  // 从configuration中获取datasource实现类，创建SqlSession实例
   private SqlSession openSessionFromDataSource(ExecutorType execType, TransactionIsolationLevel level,
       boolean autoCommit) {
     Transaction tx = null;
     try {
       final Environment environment = configuration.getEnvironment();
       final TransactionFactory transactionFactory = getTransactionFactoryFromEnvironment(environment);
+      // 获取Mybatis的Transaction（jdbc的Connection的包装类）
       tx = transactionFactory.newTransaction(environment.getDataSource(), level, autoCommit);
+      // 根据事务
       final Executor executor = configuration.newExecutor(tx, execType);
       return createSqlSession(configuration, executor, autoCommit);
     } catch (Exception e) {

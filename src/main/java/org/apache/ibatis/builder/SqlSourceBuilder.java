@@ -31,6 +31,8 @@ import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.type.JdbcType;
 
 /**
+ * 原生的sql语句构造器。将mapper的sql语句转化为符合sql标准的sql语句
+ *
  * @author Clinton Begin
  */
 public class SqlSourceBuilder extends BaseBuilder {

@@ -16,6 +16,8 @@
 package org.apache.ibatis.session;
 
 /**
+ * 行查询范围封装类。对limit、offset查询参数的封装
+ *
  * @author Clinton Begin
  */
 public class RowBounds {

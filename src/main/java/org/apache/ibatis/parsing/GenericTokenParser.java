@@ -15,7 +15,12 @@
  */
 package org.apache.ibatis.parsing;
 
+import org.apache.ibatis.builder.SqlSourceBuilder;
+
 /**
+ * 通用Token解析器
+ * 调用入口：{@link SqlSourceBuilder}
+ *
  * @author Clinton Begin
  */
 public class GenericTokenParser {

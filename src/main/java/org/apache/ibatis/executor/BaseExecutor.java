@@ -41,10 +41,14 @@ import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.LocalCacheScope;
 import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
+import org.apache.ibatis.session.defaults.DefaultSqlSession;
 import org.apache.ibatis.transaction.Transaction;
 import org.apache.ibatis.type.TypeHandlerRegistry;
 
 /**
+ * 执行器抽象类
+ * 所有执行器的方法都在{@link DefaultSqlSession}被调用
+ *
  * @author Clinton Begin
  */
 public abstract class BaseExecutor implements Executor {
@@ -344,6 +348,7 @@ public abstract class BaseExecutor implements Executor {
     return list;
   }
 
+  // 从transaction中获取connection
   protected Connection getConnection(Log statementLog) throws SQLException {
     Connection connection = transaction.getConnection();
     if (statementLog.isDebugEnabled()) {

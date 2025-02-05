@@ -26,7 +26,7 @@ import org.apache.ibatis.executor.ErrorContext;
 import org.apache.ibatis.session.defaults.DefaultSqlSessionFactory;
 
 /**
- * Builds {@link SqlSession} instances.
+ * 构建SqlSessionFactory的实例。build()是mybatis框架的入口。
  *
  * @author Clinton Begin
  */
@@ -47,6 +47,7 @@ public class SqlSessionFactoryBuilder {
   public SqlSessionFactory build(Reader reader, String environment, Properties properties) {
     try {
       XMLConfigBuilder parser = new XMLConfigBuilder(reader, environment, properties);
+      // 下面的重载方法有注释，这里省略
       return build(parser.parse());
     } catch (Exception e) {
       throw ExceptionFactory.wrapException("Error building SqlSession.", e);
@@ -77,6 +78,8 @@ public class SqlSessionFactoryBuilder {
   public SqlSessionFactory build(InputStream inputStream, String environment, Properties properties) {
     try {
       XMLConfigBuilder parser = new XMLConfigBuilder(inputStream, environment, properties);
+      // parser.parse()：从mybatis的config.xml中解析配置信息，解析mapper.xml等文件及其他处理，获取Configuration实例。
+      // 根据xml解析出来的Configuration实例，构建DefaultSqlSessionFactory实例
       return build(parser.parse());
     } catch (Exception e) {
       throw ExceptionFactory.wrapException("Error building SqlSession.", e);

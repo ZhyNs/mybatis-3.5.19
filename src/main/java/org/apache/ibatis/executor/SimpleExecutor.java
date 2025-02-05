@@ -32,6 +32,8 @@ import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.transaction.Transaction;
 
 /**
+ * 默认的sql执行器
+ *
  * @author Clinton Begin
  */
 public class SimpleExecutor extends BaseExecutor {
@@ -59,11 +61,16 @@ public class SimpleExecutor extends BaseExecutor {
     Statement stmt = null;
     try {
       Configuration configuration = ms.getConfiguration();
+      // 获取sql语句处理器
       StatementHandler handler = configuration.newStatementHandler(wrapper, ms, parameter, rowBounds, resultHandler,
           boundSql);
+      // 预编译sql语句
       stmt = prepareStatement(handler, ms.getStatementLog());
+      // sql语句处理器查询数据，将数据传递给resultHandler
       return handler.query(stmt, resultHandler);
     } finally {
+      // 关闭statement对象，释放sql语句执行相关资源。
+      // 注意：和connection.close的不同，connection内可执行多个statement语句。
       closeStatement(stmt);
     }
   }

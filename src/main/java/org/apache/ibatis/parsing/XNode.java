@@ -28,6 +28,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
+ * xml的节点类
+ *
  * @author Clinton Begin
  */
 public class XNode {
