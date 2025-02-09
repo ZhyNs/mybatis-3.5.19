@@ -33,14 +33,18 @@ import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.transaction.Transaction;
 
 /**
- * 缓存执行器（开启缓存时使用）
+ * 缓存执行器（代理模式，开启缓存时使用）
+ * 各方法底层都是调用被代理执行器实例的方法，只是在此基础上加入了缓存管理的功能。
  *
  * @author Clinton Begin
  * @author Eduardo Macarron
  */
 public class CachingExecutor implements Executor {
 
+  // 真正的执行器实例
   private final Executor delegate;
+
+  // 事务缓存管理器
   private final TransactionalCacheManager tcm = new TransactionalCacheManager();
 
   public CachingExecutor(Executor delegate) {
@@ -95,11 +99,16 @@ public class CachingExecutor implements Executor {
   @Override
   public <E> List<E> query(MappedStatement ms, Object parameterObject, RowBounds rowBounds, ResultHandler resultHandler,
       CacheKey key, BoundSql boundSql) throws SQLException {
+    // 获取mapper.xml中声明的cache
+    // https://mybatis.org/mybatis-3/sqlmap-xml.html#cache
     Cache cache = ms.getCache();
     if (cache != null) {
       flushCacheIfRequired(ms);
       if (ms.isUseCache() && resultHandler == null) {
         ensureNoOutParams(ms, boundSql);
+
+        // 从tcm缓存中获取结果集，如果存在，则直接返回
+        // 如果不存在，则使用代理执行器查询后，存入缓存，再返回
         @SuppressWarnings("unchecked")
         List<E> list = (List<E>) tcm.getObject(cache, key);
         if (list == null) {
@@ -162,11 +171,13 @@ public class CachingExecutor implements Executor {
     delegate.deferLoad(ms, resultObject, property, key, targetType);
   }
 
+  // 清除本地缓存
   @Override
   public void clearLocalCache() {
     delegate.clearLocalCache();
   }
 
+  // 检查是否清除二级缓存
   private void flushCacheIfRequired(MappedStatement ms) {
     Cache cache = ms.getCache();
     if (cache != null && ms.isFlushCacheRequired()) {

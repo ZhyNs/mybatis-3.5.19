@@ -21,14 +21,16 @@ import java.util.Map;
 import org.apache.ibatis.cache.Cache;
 
 /**
- * Lru (least recently used) cache decorator.
+ * lru（最近使用）缓存装饰器
  *
  * @author Clinton Begin
  */
 public class LruCache implements Cache {
 
   private final Cache delegate;
+  // 底层是LinkedHashMap
   private Map<Object, Object> keyMap;
+  // 长时间未使用的key
   private Object eldestKey;
 
   public LruCache(Cache delegate) {

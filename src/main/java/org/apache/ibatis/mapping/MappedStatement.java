@@ -43,10 +43,13 @@ public final class MappedStatement {
   private StatementType statementType;
   private ResultSetType resultSetType;
   private SqlSource sqlSource;
+  // sql映射语句的cache接口
   private Cache cache;
   private ParameterMap parameterMap;
   private List<ResultMap> resultMaps;
+  // 是否清除sql语言在本地和二级缓存的内容。对于select查询语言，默认为false
   private boolean flushCacheRequired;
+  // 是否使用二级缓存
   private boolean useCache;
   private boolean resultOrdered;
   private SqlCommandType sqlCommandType;
@@ -54,6 +57,7 @@ public final class MappedStatement {
   private String[] keyProperties;
   private String[] keyColumns;
   private boolean hasNestedResultMaps;
+  // 数据库id
   private String databaseId;
   private Log statementLog;
   private LanguageDriver lang;

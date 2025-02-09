@@ -90,6 +90,8 @@ import org.apache.ibatis.type.TypeHandler;
 import org.apache.ibatis.type.UnknownTypeHandler;
 
 /**
+ * mapper注解构造器
+ *
  * @author Clinton Begin
  * @author Kazuki Shimizu
  */
@@ -166,6 +168,7 @@ public class MapperAnnotationBuilder {
     }
   }
 
+  // 解析@CacheNamespace注解，构建一个cache实例
   private void parseCache() {
     CacheNamespace cacheDomain = type.getAnnotation(CacheNamespace.class);
     if (cacheDomain != null) {

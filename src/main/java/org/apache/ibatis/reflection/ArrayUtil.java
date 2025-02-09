@@ -23,7 +23,10 @@ import java.util.Arrays;
 public class ArrayUtil {
 
   /**
-   * Returns a hash code for {@code obj}.
+   * 返回obj的hashCode：
+   * 1）如果obj为null，直接返回0
+   * 2）如果obj不是数组对象，直接返回对象的hashCode
+   * 3）如果obj是数组对象，使用{@link java.util.Arrays#hashCode()}提供的hashCode
    *
    * @param obj
    *          The object to get a hash code for. May be an array or <code>null</code>.

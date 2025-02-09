@@ -48,6 +48,8 @@ import org.apache.ibatis.type.JdbcType;
 import org.apache.ibatis.type.TypeHandler;
 
 /**
+ * mapper.xml构造器类
+ *
  * @author Clinton Begin
  * @author Kazuki Shimizu
  */
@@ -161,7 +163,9 @@ public class XMLMapperBuilder extends BaseBuilder {
     }
   }
 
+  // 解析cache节点
   private void cacheElement(XNode context) {
+    // 如果cache节点不为空，根据配置参数，构建一个cache实例
     if (context != null) {
       String type = context.getStringAttribute("type", "PERPETUAL");
       Class<? extends Cache> typeClass = typeAliasRegistry.resolveAlias(type);

@@ -18,13 +18,13 @@ package org.apache.ibatis.cache;
 import java.util.concurrent.locks.ReadWriteLock;
 
 /**
- * SPI for cache providers.
- * <p>
- * One instance of cache will be created for each namespace.
- * <p>
- * The cache implementation must have a constructor that receives the cache id as an String parameter.
- * <p>
- * MyBatis will pass the namespace as id to the constructor.
+ * <a href="https://mybatis.org/mybatis-3/sqlmap-xml.html#cache">Mybatis的缓存</a>
+ *
+ * 缓存提供者的SPI。
+ * 每个命名空间都会创建一个缓存实例。缓存实现类必须有一个构造函数，参数：String类型的cache id。Mybatis会将命名空间当做id传给构造函数。
+ *
+ * 支持的缓存策略包括lru、fifo、soft、weak。如果开启，默认lru。
+ * 支持自定义Cache，详情查看官网文档
  *
  * <pre>
  * public MyCache(final String id) {

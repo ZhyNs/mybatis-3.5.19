@@ -162,10 +162,13 @@ public class Configuration {
   protected final TypeAliasRegistry typeAliasRegistry = new TypeAliasRegistry();
   protected final LanguageDriverRegistry languageRegistry = new LanguageDriverRegistry();
 
+  // 所有sql映射语句集合
   protected final Map<String, MappedStatement> mappedStatements = new StrictMap<MappedStatement>(
       "Mapped Statements collection")
           .conflictMessageProducer((savedValue, targetValue) -> ". please check " + savedValue.getResource() + " and "
               + targetValue.getResource());
+
+  // 所有mapper的cache集合
   protected final Map<String, Cache> caches = new StrictMap<>("Caches collection");
   protected final Map<String, ResultMap> resultMaps = new StrictMap<>("Result Maps collection");
   protected final Map<String, ParameterMap> parameterMaps = new StrictMap<>("Parameter Maps collection");
@@ -751,7 +754,7 @@ public class Configuration {
       // 默认sql执行器
       executor = new SimpleExecutor(this, transaction);
     }
-    // 如果开启缓存，则使用缓存sql执行器
+    // 如果开启缓存，则使用缓存sql执行器（代理模式，executor传参）。
     if (cacheEnabled) {
       executor = new CachingExecutor(executor);
     }

@@ -26,6 +26,8 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.StringTokenizer;
 
+import org.apache.ibatis.builder.annotation.MapperAnnotationBuilder;
+import org.apache.ibatis.builder.xml.XMLMapperBuilder;
 import org.apache.ibatis.cache.Cache;
 import org.apache.ibatis.cache.decorators.LruCache;
 import org.apache.ibatis.cache.impl.PerpetualCache;
@@ -51,12 +53,17 @@ import org.apache.ibatis.type.JdbcType;
 import org.apache.ibatis.type.TypeHandler;
 
 /**
+ * mapper的构建器帮助类
+ * 可用于{@link XMLMapperBuilder}和 {@link MapperAnnotationBuilder}
+ *
  * @author Clinton Begin
  */
 public class MapperBuilderAssistant extends BaseBuilder {
 
+  // 当前命名空间：类似com.xxx.dao.yyyDao
   private String currentNamespace;
   private final String resource;
+  // mapper.xml配置的缓存，如果没有配置，则为null
   private Cache currentCache;
   private boolean unresolvedCacheRef; // issue #676
 
@@ -104,6 +111,7 @@ public class MapperBuilderAssistant extends BaseBuilder {
     return currentNamespace + "." + base;
   }
 
+  // 使用指定的namespace的cache。
   public Cache useCacheRef(String namespace) {
     if (namespace == null) {
       throw new BuilderException("cache-ref element requires a namespace attribute.");
@@ -122,11 +130,13 @@ public class MapperBuilderAssistant extends BaseBuilder {
     }
   }
 
+  // 构建一个新的cache实例
   public Cache useNewCache(Class<? extends Cache> typeClass, Class<? extends Cache> evictionClass, Long flushInterval,
       Integer size, boolean readWrite, boolean blocking, Properties props) {
     Cache cache = new CacheBuilder(currentNamespace).implementation(valueOrDefault(typeClass, PerpetualCache.class))
         .addDecorator(valueOrDefault(evictionClass, LruCache.class)).clearInterval(flushInterval).size(size)
         .readWrite(readWrite).blocking(blocking).properties(props).build();
+    // 配置类添加cache
     configuration.addCache(cache);
     currentCache = cache;
     return cache;
@@ -208,6 +218,7 @@ public class MapperBuilderAssistant extends BaseBuilder {
 
     id = applyCurrentNamespace(id, false);
 
+    // 构建sql映射语句实例
     MappedStatement.Builder statementBuilder = new MappedStatement.Builder(configuration, id, sqlSource, sqlCommandType)
         .resource(resource).fetchSize(fetchSize).timeout(timeout).statementType(statementType)
         .keyGenerator(keyGenerator).keyProperty(keyProperty).keyColumn(keyColumn).databaseId(databaseId).lang(lang)
