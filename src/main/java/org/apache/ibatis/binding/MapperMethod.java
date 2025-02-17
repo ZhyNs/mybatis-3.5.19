@@ -39,6 +39,8 @@ import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 
 /**
+ * mapper的方法类，包括sql执行命令、方法签名等信息。
+ *
  * @author Clinton Begin
  * @author Eduardo Macarron
  * @author Lasse Voss

@@ -33,6 +33,9 @@ import org.apache.ibatis.type.TypeHandler;
 import org.apache.ibatis.type.TypeHandlerRegistry;
 
 /**
+ * 默认的参数处理器。
+ * 主要内容：根据boundSql，获取ParameterMapping列表，并且for循环处理（获取参数的类型处理器，再赋值）即可。
+ *
  * @author Clinton Begin
  * @author Eduardo Macarron
  */
@@ -64,9 +67,13 @@ public class DefaultParameterHandler implements ParameterHandler {
     List<ParameterMapping> parameterMappings = boundSql.getParameterMappings();
     if (parameterMappings != null) {
       MetaObject metaObject = null;
+
+      // for循环给参数赋值（底层使用类型处理器）
       for (int i = 0; i < parameterMappings.size(); i++) {
         ParameterMapping parameterMapping = parameterMappings.get(i);
+        // 判断参数类型不是输出类型，再继续处理
         if (parameterMapping.getMode() != ParameterMode.OUT) {
+          // 获取参数值
           Object value;
           String propertyName = parameterMapping.getProperty();
           if (boundSql.hasAdditionalParameter(propertyName)) { // issue #448 ask first for additional params
@@ -81,12 +88,14 @@ public class DefaultParameterHandler implements ParameterHandler {
             }
             value = metaObject.getValue(propertyName);
           }
+          // 类型处理器
           TypeHandler typeHandler = parameterMapping.getTypeHandler();
           JdbcType jdbcType = parameterMapping.getJdbcType();
           if (value == null && jdbcType == null) {
             jdbcType = configuration.getJdbcTypeForNull();
           }
           try {
+            // 参数的类型处理器给参数赋值
             typeHandler.setParameter(ps, i + 1, value, jdbcType);
           } catch (TypeException | SQLException e) {
             throw new TypeException("Could not set parameters for mapping: " + parameterMapping + ". Cause: " + e, e);

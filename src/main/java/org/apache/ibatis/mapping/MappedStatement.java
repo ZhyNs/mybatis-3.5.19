@@ -322,6 +322,7 @@ public final class MappedStatement {
     return resultSets;
   }
 
+  // 根据参数，获取解析后的sql信息
   public BoundSql getBoundSql(Object parameterObject) {
     BoundSql boundSql = sqlSource.getBoundSql(parameterObject);
     List<ParameterMapping> parameterMappings = boundSql.getParameterMappings();

@@ -21,6 +21,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
+ * 类型处理器。负责给参数赋值、获取返回结果
+ *
  * @author Clinton Begin
  */
 public interface TypeHandler<T> {

@@ -31,7 +31,7 @@ import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.type.JdbcType;
 
 /**
- * 原生的sql语句构造器。将mapper的sql语句转化为符合sql标准的sql语句
+ * sql语句构造器。将mapper的sql语句转化为符合sql标准的sql语句
  *
  * @author Clinton Begin
  */
@@ -43,6 +43,7 @@ public class SqlSourceBuilder extends BaseBuilder {
     super(configuration);
   }
 
+  // 解析Mybatis标签（#{param}）
   public SqlSource parse(String originalSql, Class<?> parameterType, Map<String, Object> additionalParameters) {
     ParameterMappingTokenHandler handler = new ParameterMappingTokenHandler(configuration, parameterType,
         additionalParameters);
@@ -70,6 +71,7 @@ public class SqlSourceBuilder extends BaseBuilder {
     return builder.toString();
   }
 
+  // 参数映射token处理器
   private static class ParameterMappingTokenHandler extends BaseBuilder implements TokenHandler {
 
     private final List<ParameterMapping> parameterMappings = new ArrayList<>();
@@ -87,6 +89,7 @@ public class SqlSourceBuilder extends BaseBuilder {
       return parameterMappings;
     }
 
+    // 处理mybatis标签token：1）根据标签信息，构建ParameterMapping实例；2）返回占位符"?"
     @Override
     public String handleToken(String content) {
       parameterMappings.add(buildParameterMapping(content));

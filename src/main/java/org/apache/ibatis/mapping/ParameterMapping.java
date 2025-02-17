@@ -23,6 +23,8 @@ import org.apache.ibatis.type.TypeHandler;
 import org.apache.ibatis.type.TypeHandlerRegistry;
 
 /**
+ * 参数类型映射类
+ *
  * @author Clinton Begin
  */
 public class ParameterMapping {
@@ -31,9 +33,12 @@ public class ParameterMapping {
 
   private String property;
   private ParameterMode mode;
+  // Java类型
   private Class<?> javaType = Object.class;
+  // jdbc类型
   private JdbcType jdbcType;
   private Integer numericScale;
+  // 类型处理器：用来给参数赋值，获取返回结果
   private TypeHandler<?> typeHandler;
   private String resultMapId;
   private String jdbcTypeName;
@@ -100,7 +105,9 @@ public class ParameterMapping {
     }
 
     public ParameterMapping build() {
+      // 解析类型处理器
       resolveTypeHandler();
+      // 验证字段属性是否正确（resultMapId、typeHandler是否为空）
       validate();
       return parameterMapping;
     }
@@ -118,10 +125,13 @@ public class ParameterMapping {
       }
     }
 
+    // 解析类型处理器
     private void resolveTypeHandler() {
       if (parameterMapping.typeHandler == null && parameterMapping.javaType != null) {
         Configuration configuration = parameterMapping.configuration;
+        // 从Configuration中获取类型处理器注册中心
         TypeHandlerRegistry typeHandlerRegistry = configuration.getTypeHandlerRegistry();
+        // 根据java类型、jdbc类型，从注册中心选择合适的类型处理器
         parameterMapping.typeHandler = typeHandlerRegistry.getTypeHandler(parameterMapping.javaType,
             parameterMapping.jdbcType);
       }

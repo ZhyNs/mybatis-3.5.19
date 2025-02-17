@@ -24,11 +24,10 @@ import org.apache.ibatis.reflection.property.PropertyTokenizer;
 import org.apache.ibatis.session.Configuration;
 
 /**
- * An actual SQL String got from an {@link SqlSource} after having processed any dynamic content. The SQL may have SQL
- * placeholders "?" and a list (ordered) of a parameter mappings with the additional information for each parameter (at
- * least the property name of the input object to read the value from).
+ * BoundSql持有最后的sql语句字符串（在处理所有动态内容后得到的）。
+ * BoundSql包含有占位符?的sql语句、固定顺序的参数列表，也包括一些动态语言的参数（比如loop和bind）。
  * <p>
- * Can also have additional parameters that are created by the dynamic language (for loops, bind...).
+ * BoundSql是SqlSource类创建的，SqlSource是在解析mapper.xml的sql语句时LanguageDriver创建。
  *
  * @author Clinton Begin
  */

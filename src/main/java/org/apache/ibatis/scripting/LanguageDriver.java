@@ -23,6 +23,9 @@ import org.apache.ibatis.parsing.XNode;
 import org.apache.ibatis.scripting.defaults.DefaultParameterHandler;
 import org.apache.ibatis.session.Configuration;
 
+/**
+ * 语言驱动器接口。在mybatis可以使用各种脚本语言来定义在mapper.xml文件中的动态sql
+ */
 public interface LanguageDriver {
 
   /**
@@ -44,6 +47,8 @@ public interface LanguageDriver {
   ParameterHandler createParameterHandler(MappedStatement mappedStatement, Object parameterObject, BoundSql boundSql);
 
   /**
+   * 根据mapper.xml文件的sql语句，创建SqlSource实例。
+   *
    * Creates an {@link SqlSource} that will hold the statement read from a mapper xml file. It is called during startup,
    * when the mapped statement is read from a class or an xml file.
    *
@@ -60,6 +65,8 @@ public interface LanguageDriver {
   SqlSource createSqlSource(Configuration configuration, XNode script, Class<?> parameterType);
 
   /**
+   * 根据注解的sql语句，创建SqlSource实例。
+   *
    * Creates an {@link SqlSource} that will hold the statement read from an annotation. It is called during startup,
    * when the mapped statement is read from a class or an xml file.
    *

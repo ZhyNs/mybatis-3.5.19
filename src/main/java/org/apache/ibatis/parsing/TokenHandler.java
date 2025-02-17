@@ -16,6 +16,8 @@
 package org.apache.ibatis.parsing;
 
 /**
+ * Mybatis标签token处理器
+ *
  * @author Clinton Begin
  */
 public interface TokenHandler {

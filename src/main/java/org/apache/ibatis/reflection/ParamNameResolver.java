@@ -31,6 +31,9 @@ import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
 
+/**
+ * 参数名解析器
+ */
 public class ParamNameResolver {
 
   public static final String GENERIC_NAME_PREFIX = "param";
@@ -46,10 +49,9 @@ public class ParamNameResolver {
   private final boolean useActualParamName;
 
   /**
-   * The key is the index and the value is the name of the parameter.<br />
-   * The name is obtained from {@link Param} if specified. When {@link Param} is not specified, the parameter index is
-   * used. Note that this index could be different from the actual index when the method has special parameters (i.e.
-   * {@link RowBounds} or {@link ResultHandler}).
+   * key是参数序号，value是参数名。
+   * 参数名来自@Param指定的，如果@Param没有指定，则使用参数序号。
+   * 当使用 RowBounds或者ResultHandler（序号会跳过）时，参数序号可能不是实际的序号。具体可查看下面的例子。
    * <ul>
    * <li>aMethod(@Param("M") int a, @Param("N") int b) -&gt; {{0, "M"}, {1, "N"}}</li>
    * <li>aMethod(int a, int b) -&gt; {{0, "0"}, {1, "1"}}</li>
@@ -114,6 +116,8 @@ public class ParamNameResolver {
   }
 
   /**
+   * 返回的Object实例是Map<String, Object>类型
+   * <p>
    * A single non-special parameter is returned without a name. Multiple parameters are named using the naming rule. In
    * addition to the default names, this method also adds the generic names (param1, param2, ...).
    *

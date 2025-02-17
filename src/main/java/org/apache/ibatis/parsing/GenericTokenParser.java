@@ -25,8 +25,11 @@ import org.apache.ibatis.builder.SqlSourceBuilder;
  */
 public class GenericTokenParser {
 
+  // Mybatis的标签token前缀：#{
   private final String openToken;
+  // Mybatis的标签token后缀：}
   private final String closeToken;
+  // token处理器
   private final TokenHandler handler;
 
   public GenericTokenParser(String openToken, String closeToken, TokenHandler handler) {
@@ -39,7 +42,7 @@ public class GenericTokenParser {
     if (text == null || text.isEmpty()) {
       return "";
     }
-    // search open token
+    // 寻找token前缀
     int start = text.indexOf(openToken);
     if (start == -1) {
       return text;
@@ -48,6 +51,8 @@ public class GenericTokenParser {
     int offset = 0;
     final StringBuilder builder = new StringBuilder();
     StringBuilder expression = null;
+
+    // 循环处理mybatis标签token
     do {
       if (start > 0 && src[start - 1] == '\\') {
         // this open token is escaped. remove the backslash and continue.
@@ -62,6 +67,7 @@ public class GenericTokenParser {
         }
         builder.append(src, offset, start - offset);
         offset = start + openToken.length();
+        // mybatis标签token的后缀位置
         int end = text.indexOf(closeToken, offset);
         while (end > -1) {
           if ((end <= offset) || (src[end - 1] != '\\')) {
@@ -78,6 +84,7 @@ public class GenericTokenParser {
           builder.append(src, start, src.length - start);
           offset = src.length;
         } else {
+          // handleToken返回了占位符'?'
           builder.append(handler.handleToken(expression.toString()));
           offset = end + closeToken.length();
         }

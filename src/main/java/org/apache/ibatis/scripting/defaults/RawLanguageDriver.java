@@ -22,8 +22,9 @@ import org.apache.ibatis.scripting.xmltags.XMLLanguageDriver;
 import org.apache.ibatis.session.Configuration;
 
 /**
- * As of 3.2.4 the default XML language is able to identify static statements and create a {@link RawSqlSource}. So
- * there is no need to use RAW unless you want to make sure that there is not any dynamic tag for any reason.
+ *
+ * 原生的语言驱动器（仅用于没有任何动态标签的情况）
+ * 3.2.4版本后默认的xml语言可识别静态语句和创建RawSqlSource实例。除非确定没有动态标签，否则没有必须使用这个类。
  *
  * @since 3.2.0
  *
