@@ -18,6 +18,10 @@ package org.apache.ibatis.plugin;
 import java.util.Properties;
 
 /**
+ * 拦截器接口
+ * 拦截的对象：ParameterHandler、StatementHandler、ResultSetHandler、Executor，包括sql执行前后的各个环节。
+ * 拦截器实现类，在方法中通过判断拦截对象是否目标类型，选择是否处理。
+ *
  * @author Clinton Begin
  */
 public interface Interceptor {

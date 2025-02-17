@@ -100,6 +100,9 @@ import org.apache.ibatis.type.TypeHandlerRegistry;
 
 /**
  * Mybatis的配置类，核心类。（可作为阅读源码的入口）
+ * 有两种构建方式：
+ * - .xml文件解析
+ * - 初始化Configuration实例后，根据需要调用相关方法
  *
  * @author Clinton Begin
  */

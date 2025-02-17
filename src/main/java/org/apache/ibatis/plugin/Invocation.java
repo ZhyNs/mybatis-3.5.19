@@ -26,6 +26,8 @@ import org.apache.ibatis.executor.resultset.ResultSetHandler;
 import org.apache.ibatis.executor.statement.StatementHandler;
 
 /**
+ * 将目标对象调用的方法参数封装成类，便于拦截器处理，包括目标对象、执行方法、传入参数。
+ *
  * @author Clinton Begin
  */
 public class Invocation {

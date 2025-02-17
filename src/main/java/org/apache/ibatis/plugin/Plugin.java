@@ -27,6 +27,9 @@ import org.apache.ibatis.reflection.ExceptionUtil;
 import org.apache.ibatis.util.MapUtil;
 
 /**
+ * 拦截器插件类。
+ * 唯一的作用是通过反射将拦截器的业务逻辑嵌入到新生成的动态代理类中。
+ *
  * @author Clinton Begin
  */
 public class Plugin implements InvocationHandler {
@@ -41,6 +44,13 @@ public class Plugin implements InvocationHandler {
     this.signatureMap = signatureMap;
   }
 
+  /**
+   * 通过反射生成一个新的动态代理类（静态方法）
+   *
+   * @param target 目标对象，包括ParameterHandler、StatementHandler、ResultSetHandler、Executor。
+   * @param interceptor 拦截器
+   * @return 代理类实例
+   */
   public static Object wrap(Object target, Interceptor interceptor) {
     Map<Class<?>, Set<Method>> signatureMap = getSignatureMap(interceptor);
     Class<?> type = target.getClass();
@@ -51,13 +61,17 @@ public class Plugin implements InvocationHandler {
     return target;
   }
 
+  // InvocationHandler的实现方法，也是Plugin类的唯一私有方法
   @Override
   public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
     try {
+      // 执行拦截器的方法，将方法参数封装成Invocation类实例
       Set<Method> methods = signatureMap.get(method.getDeclaringClass());
       if (methods != null && methods.contains(method)) {
         return interceptor.intercept(new Invocation(target, method, args));
       }
+
+      // 调用目标对象的实际方法
       return method.invoke(target, args);
     } catch (Exception e) {
       throw ExceptionUtil.unwrapThrowable(e);

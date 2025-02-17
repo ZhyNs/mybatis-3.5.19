@@ -20,10 +20,13 @@ import java.util.Collections;
 import java.util.List;
 
 /**
+ * 拦截器链类
+ *
  * @author Clinton Begin
  */
 public class InterceptorChain {
 
+  // 拦截器列表
   private final List<Interceptor> interceptors = new ArrayList<>();
 
   public Object pluginAll(Object target) {
